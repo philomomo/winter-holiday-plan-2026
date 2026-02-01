@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>马妆宜·暖宝·Joie一年级寒假计划（2026）</title>
+    <!-- 使用国内可快速访问的 CDN -->
+    <script src="https://cdn.staticfile.org/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdn.staticfile.org/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.staticfile.org/babel-standalone/7.23.5/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
+        body { 
+            font-family: 'Noto Sans SC', sans-serif; 
+            -webkit-tap-highlight-color: transparent;
+        }
+        .line-through-gray { 
+            text-decoration: line-through; 
+            color: #9ca3af; 
+        }
+        /* Custom checkbox style for mobile friendliness */
+        input[type="checkbox"] {
+            cursor: pointer;
+            min-width: 1.25rem;
+            min-height: 1.25rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // Icon Component using Lucide
+        const Icon = ({ name, className }) => {
+            useEffect(() => {
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            }, [name]);
+            return <i data-lucide={name} className={className}></i>;
+        };
+
+        const App = () => {
+            // State management for tasks with localStorage persistence
+            const [checkedTasks, setCheckedTasks] = useState(() => {
+                try {
+                    const saved = localStorage.getItem('joie_plan_tasks_v1');
+                    return saved ? JSON.parse(saved) : {};
+                } catch (e) {
+                    return {};
+                }
+            });
+
+            useEffect(() => {
+                localStorage.setItem('joie_plan_tasks_v1', JSON.stringify(checkedTasks));
+            }, [checkedTasks]);
+
+            const toggleTask = (taskId) => {
+                setCheckedTasks(prev => ({ ...prev, [taskId]: !prev[taskId] }));
+            };
+
+            const DailyHabitsBoard = () => (
+                <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 mb-6 shadow-sm">
+                    <div className="flex items-center gap-2 mb-3 border-b border-indigo-200 pb-2">
+                        <Icon name="star" className="w-5 h-5 text-indigo-600 fill-current" />
+                        <span className="font-bold text-indigo-900 text-sm md:text-base">每日必做习惯 (参考)</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2 text-xs md:text-sm text-indigo-800">
+                        {["📚 阅读&记录(30分)", "🔤 记10个单词(15分)", "🧮 数学小花园1页(10分)", "📖 RAZ阅读(15分)", "✍️ 作业帮2页(10分)"].map(item => (
+                            <span key={item} className="bg-white px-2 py-1 rounded border border-indigo-100 shadow-sm flex items-center gap-1">
+                                {item}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            );
+
+            const phases = [
+                {
+                    id: 0,
+                    title: "第一阶段：课程集训周",
+                    dateRange: "2月2日 - 2月6日",
+                    focus: "周一至周三课满。周四五利用空闲时间集中完成学校任务。",
+                    status: "class_heavy", 
+                    hasDailyHabits: true,
+                    days: [
+                        { name: "周一 (2.2)", tags: ["双课日"], am: ["晨起: 🔤背单词 + 📖RAZ", "📝 9:15-11:15 Dora英语"], pm: ["🔢 1:30-3:30 蓝天数学", "课后: 🧮小花园 + ✍️作业帮"], eve: ["📚 阅读30分(写记录)", "🛁 泡脚早睡"] },
+                        { name: "周二 (2.3)", tags: ["双课日"], am: ["晨起: 🔤背单词 + 📖RAZ", "📝 9:15-11:15 Dora英语"], pm: ["🔢 1:30-3:30 蓝天数学", "课后: 🧮小花园 + ✍️作业帮"], eve: ["📚 阅读30分", "👨‍👩‍👧 亲子共读"] },
+                        { name: "周三 (2.4)", tags: ["数学结课"], am: ["晨起: 🔤背单词 + 📖RAZ", "📝 9:15-11:15 Dora英语"], pm: ["🔢 1:30-3:30 蓝天数学 (结课)", "课后: 🧮小花园 + ✍️作业帮"], eve: ["📚 阅读30分", "📺 纪录片放松"] },
+                        { name: "周四 (2.5)", tags: ["集中作业"], am: ["晨起: 🔤背单词 + 📖RAZ", "📝 9:15-11:15 Dora英语"], pm: ["<b class='text-red-600 font-bold'>(临时) 安排作业和学校任务</b>", "🌟 集中完成: 🧮小花园", "✍️ 作业帮2页"], eve: ["📚 阅读30分(重点分析一本书)", "✂️ 手工时间"] },
+                        { name: "周五 (2.6)", tags: ["英语结课"], am: ["晨起: 🔤背单词 + 📖RAZ", "📝 9:15-11:15 Dora英语 (结课)"], pm: ["<b class='text-red-600 font-bold'>(临时) 安排作业和学校任务</b>", "🌤️ 户外放风"], eve: ["📚 阅读30分", "🎬 家庭电影夜"] }
+                    ]
+                },
+                {
+                    id: 1,
+                    title: "第二阶段：出发去海南",
+                    dateRange: "2月7日 - 2月8日",
+                    focus: "特殊节点：任务减半。仅保留阅读和听力。",
+                    status: "travel",
+                    hasDailyHabits: false,
+                    days: [
+                        { name: "周六 (2.7)", tags: ["备战出行"], am: ["🧳 收拾行李 (带书)", "🔍 检查证件/装备"], pm: ["<b class='text-red-600 font-bold'>(临时) 安排作业和学校任务</b>", "🏠 房屋断电断水"], eve: ["⏰ 极早睡觉!!"] },
+                        { name: "周日 (2.8)", tags: ["飞行"], am: ["✈️ 07:10起飞: 📚阅读/听力"], pm: ["🌴 抵达海口/安顿", "🥥 适应气候"], eve: ["🌊 海边散步"] }
+                    ]
+                },
+                {
+                    id: 2,
+                    title: "第三阶段：海南环岛骑行",
+                    dateRange: "2月9日 - 2月13日",
+                    focus: "体力挑战！任务仅保留“写日记”和“阅读”。",
+                    status: "sport",
+                    hasDailyHabits: false,
+                    days: [
+                        { name: "周一 (2.9)", tags: ["集合"], am: ["🚲 骑行 Day 1 (开营)"], pm: ["🚲 适应性骑行"], eve: ["📝 骑行日记", "📚 睡前阅读"] },
+                        { name: "周二 (2.10)", tags: [], am: ["🚲 骑行 Day 2"], pm: ["🚲 挑战自我"], eve: ["📝 骑行日记", "📚 睡前阅读"] },
+                        { name: "周三 (2.11)", tags: [], am: ["🚲 骑行 Day 3"], pm: ["🚲 欣赏风景"], eve: ["📝 骑行日记", "📚 睡前阅读"] },
+                        { name: "周四 (2.12)", tags: [], am: ["🚲 骑行 Day 4"], pm: ["🚲 坚持到底"], eve: ["📝 骑行日记", "📚 睡前阅读"] },
+                        { name: "周五 (2.13)", tags: [], am: ["🚲 骑行 Day 5"], pm: ["🚲 冲刺准备"], eve: ["📝 骑行日记", "📚 睡前阅读"] }
+                    ]
+                },
+                {
+                    id: 3,
+                    title: "第四阶段：收官 & 飞往老家",
+                    dateRange: "2月14日 - 2月15日",
+                    focus: "南北温差大。利用路途时间完成阅读和听力。",
+                    status: "travel_home",
+                    hasDailyHabits: false,
+                    days: [
+                        { name: "周六 (2.14)", tags: ["长途"], am: ["🚲 骑行 Day 6 (颁奖)"], pm: ["✈️ 16:35飞运城: 📖RAZ/单词", "❄️ 抵达注意保暖"], eve: ["🏠 见爷爷奶奶"] },
+                        { name: "周日 (2.15)", tags: ["休息"], am: ["🛌 补觉休整"], pm: ["<b class='text-red-600 font-bold'>(临时) 安排作业和学校任务</b>", "🔄 恢复: 小花园+作业帮"], eve: ["📚 阅读30分"] }
+                    ]
+                },
+                {
+                    id: 4,
+                    title: "第五阶段：老家春节周",
+                    dateRange: "2月16日 - 2月20日",
+                    focus: "除夕至初二休息。初三起恢复大块学习时间。",
+                    status: "holiday",
+                    hasDailyHabits: false,
+                    days: [
+                        { name: "周一 (2.16)", tags: ["除夕"], am: ["🧨 贴春联/窗花"], pm: ["🥟 包饺子/自由玩"], eve: ["🎉 守岁 (全休)"] },
+                        { name: "周二 (2.17)", tags: ["初一"], am: ["🧧 拜年/红包"], pm: ["👨‍👩‍👧‍👦 家庭聚会"], eve: ["🚫 彻底休息"] },
+                        { name: "周三 (2.18)", tags: ["初二"], am: ["🚪 走亲戚"], pm: ["🎡 逛庙会"], eve: ["🚫 彻底休息"] },
+                        { name: "周四 (2.19)", tags: ["初三"], am: ["<b class='text-red-600 font-bold'>(临时) 安排作业和学校任务</b>", "🔄 恢复核心打卡"], pm: ["📖 RAZ + 🔤单词"], eve: ["📚 阅读30分"] },
+                        { name: "周五 (2.20)", tags: ["初四"], am: ["<b class='text-red-600 font-bold'>(临时) 安排作业和学校任务</b>", "☀️ 全面恢复"], pm: ["🧳 惜别父母"], eve: ["📋 移交监督清单"] }
+                    ]
+                },
+                {
+                    id: 5,
+                    title: "第六阶段：老人托管期",
+                    dateRange: "2月21日 - 2月26日",
+                    focus: "重点时期！每天安排固定大块时间完成寒假作业。",
+                    status: "grandparents",
+                    hasDailyHabits: true,
+                    days: [
+                        { name: "周六 (2.21)", tags: ["离别"], am: ["🚗 送机 / 📖 RAZ"], pm: ["✈️ 父母回深 / 🧮 小花园"], eve: ["📚 阅读 / 📞 视频"] },
+                        { name: "周日 (2.22)", tags: [], am: ["<b class='text-red-600 font-bold'>(临时) 安排作业和学校任务</b>", "🧮 数学小花园"], pm: ["📖 RAZ + 🔤单词"], eve: ["📚 阅读记录"] },
+                        { name: "周一 (2.23)", tags: [], am: ["<b class='text-red-600 font-bold'>(临时) 安排作业和学校任务</b>", "🧮 数学小花园"], pm: ["📖 RAZ + 🔤单词"], eve: ["📚 视频背诵"] },
+                        { name: "周二 (2.24)", tags: [], am: ["<b class='text-red-600 font-bold'>(临时) 安排作业和学校任务</b>", "🧮 数学小花园"], pm: ["📖 RAZ + 🔤单词"], eve: ["📚 视频讲书"] },
+                        { name: "周三 (2.25)", tags: [], am: ["<b class='text-red-600 font-bold'>(临时) 安排作业和学校任务</b>", "🧮 数学小花园"], pm: ["📖 RAZ + 🔤单词"], eve: ["📚 检查作业"] },
+                        { name: "周四 (2.26)", tags: [], am: ["<b class='text-red-600 font-bold'>(临时) 安排作业和学校任务</b>", "🧮 数学小花园"], pm: ["📖 RAZ + 🔤单词"], eve: ["🧳 收行李"] }
+                    ]
+                },
+                {
+                    id: 6,
+                    title: "第七阶段：返深收心 & 开学",
+                    dateRange: "2月27日 - 3月1日",
+                    focus: "回归深圳，调整作息，准备报到。",
+                    status: "back_to_school",
+                    hasDailyHabits: true,
+                    days: [
+                        { name: "周五 (2.27)", tags: ["返深"], am: ["✈️ 飞机上阅读"], pm: ["🏠 抵深 / 🧮 补小花园"], eve: ["🛌 早睡收心"] },
+                        { name: "周六 (2.28)", tags: ["最后冲刺"], am: ["<b class='text-red-600 font-bold'>(临时) 安排作业和学校任务</b>", "✍️ 作业帮"], pm: ["📖 RAZ + 🛒买文具"], eve: ["📚 阅读总结"] },
+                        { name: "周日 (3.1)", tags: ["开学"], am: ["🏫 注册报到"], pm: ["📚 包书皮/整指甲"], eve: ["🎒 整理书包"] }
+                    ]
+                }
+            ];
+
+            const getTheme = (status) => {
+                const themes = {
+                    class_heavy: { bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-900', icon: 'text-purple-600' },
+                    travel: { bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-900', icon: 'text-blue-600' },
+                    sport: { bg: 'bg-orange-50', border: 'border-orange-200', text: 'text-orange-900', icon: 'text-orange-600' },
+                    travel_home: { bg: 'bg-indigo-50', border: 'border-indigo-200', text: 'text-indigo-900', icon: 'text-indigo-600' },
+                    holiday: { bg: 'bg-red-50', border: 'border-red-200', text: 'text-red-900', icon: 'text-red-600' },
+                    grandparents: { bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-900', icon: 'text-green-600' },
+                    back_to_school: { bg: 'bg-teal-50', border: 'border-teal-200', text: 'text-teal-900', icon: 'text-teal-600' }
+                };
+                return themes[status] || themes.class_heavy;
+            };
+
+            const getIconName = (status) => {
+                const icons = { class_heavy: 'book-open', travel: 'plane', sport: 'bike', travel_home: 'home', holiday: 'sun', grandparents: 'users', back_to_school: 'briefcase' };
+                return icons[status] || 'sun';
+            };
+
+            return (
+                <div className="max-w-6xl mx-auto p-3 md:p-6 pb-20">
+                    <header className="bg-white rounded-2xl shadow-sm p-6 mb-8 text-center border-b-4 border-indigo-500">
+                        <h1 className="text-xl md:text-3xl font-black text-gray-800 mb-2">👧 马妆宜·暖宝·Joie一年级寒假计划（2026）</h1>
+                        <p className="text-gray-500 text-sm">📅 2月2日 - 3月1日 | ✨ 点击复选框即可保存进度</p>
+                    </header>
+
+                    <div className="space-y-12">
+                        {phases.map(phase => {
+                            const theme = getTheme(phase.status);
+                            return (
+                                <section key={phase.id} className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100">
+                                    <div className={`${theme.bg} p-6 border-b ${theme.border}`}>
+                                        <div className="flex flex-col md:flex-row gap-4 justify-between items-start">
+                                            <div className="flex gap-4">
+                                                <div className={`p-3 rounded-xl bg-white shadow-sm ${theme.icon}`}>
+                                                    <Icon name={getIconName(phase.status)} className="w-6 h-6" />
+                                                </div>
+                                                <div>
+                                                    <h2 className={`text-xl font-bold ${theme.text}`}>{phase.title}</h2>
+                                                    <p className="text-sm opacity-80">{phase.dateRange}</p>
+                                                    <p className="text-sm mt-2 font-medium">重点: {phase.focus}</p>
+                                                </div>
+                                            </div>
+                                            {phase.hasDailyHabits && <DailyHabitsBoard />}
+                                        </div>
+                                    </div>
+
+                                    <div className="p-4 bg-gray-50/20">
+                                        <div className="space-y-4">
+                                            {phase.days.map((day, dIdx) => (
+                                                <div key={dIdx} className="bg-white rounded-xl border border-gray-100 p-4 shadow-sm grid grid-cols-1 md:grid-cols-10 gap-4">
+                                                    <div className="md:col-span-2">
+                                                        <div className="font-black text-gray-800 text-lg">{day.name}</div>
+                                                        <div className="flex flex-wrap gap-1 mt-2">
+                                                            {day.tags.map(tag => <span key={tag} className="text-[10px] px-2 py-0.5 bg-gray-100 rounded-full border border-gray-200 font-medium text-gray-600">{tag}</span>)}
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    {['am', 'pm', 'eve'].map((time, tIdx) => (
+                                                        <div key={time} className={`md:col-span-${time === 'eve' ? '2' : '3'} space-y-2 ${time !== 'am' ? 'md:border-l md:pl-4 border-gray-100' : ''}`}>
+                                                            <div className="text-[10px] font-bold text-gray-400 uppercase flex items-center gap-1 mb-1">
+                                                                <Icon name={time==='am'?'sun':time==='pm'?'coffee':'moon'} className="w-3 h-3" />
+                                                                {time==='am'?'上午':time==='pm'?'下午':'晚上'}
+                                                            </div>
+                                                            {day[time].map((task, i) => {
+                                                                const taskId = `v1-${phase.id}-${dIdx}-${time}-${i}`;
+                                                                return (
+                                                                    <label key={i} className="flex items-start gap-2 cursor-pointer p-1 rounded hover:bg-gray-50 transition-all active:scale-95">
+                                                                        <input 
+                                                                            type="checkbox" 
+                                                                            className="mt-1 w-5 h-5 md:w-4 md:h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                                            checked={!!checkedTasks[taskId]}
+                                                                            onChange={() => toggleTask(taskId)}
+                                                                        />
+                                                                        <span className={`text-sm leading-snug ${checkedTasks[taskId] ? 'line-through-gray' : 'text-gray-700'}`} dangerouslySetInnerHTML={{ __html: task }}></span>
+                                                                    </label>
+                                                                )
+                                                            })}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </section>
+                            );
+                        })}
+                    </div>
+                    <footer className="mt-10 pb-10 text-center text-gray-400 text-xs">
+                        &copy; 2026 Daddy's Love. Powered by Joie's Family.
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
